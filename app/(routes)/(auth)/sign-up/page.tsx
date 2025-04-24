@@ -4,4 +4,4 @@ function Page() {
   )
 }
 
-export default SignUp
+export default Page
