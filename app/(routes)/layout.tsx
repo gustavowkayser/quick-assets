@@ -6,6 +6,12 @@ import type { Metadata } from "next";
 import "@/app/globals.css";
 
 import { ThemeProvider } from "next-themes";
+import BackgroundFX from "@/components/ui/background-fx";
+
+import {
+  ClerkProvider,
+} from '@clerk/nextjs'
+import { dark } from "@clerk/themes";
 
 export const metadata: Metadata = {
   title: "Quick Assets",
@@ -22,17 +28,24 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.className} antialiased`}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-        </ThemeProvider>
-      </body>
-    </html>
+    <ClerkProvider
+      appearance={{
+        baseTheme: dark,
+      }}
+    >
+      <html lang="en" suppressHydrationWarning>
+        <body className={`${inter.className} antialiased`}>
+          <BackgroundFX />
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="dark"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+          </ThemeProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
