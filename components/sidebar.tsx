@@ -22,7 +22,6 @@ import {
 } from "@/components/ui/sidebar"
 import Image from "next/image"
 import Link from "next/link"
-import { Button } from "./ui/button"
 
 const items = [
   {
@@ -43,7 +42,6 @@ const items = [
 ]
 
 export function AppSidebar() {
-  const user = null
   const pathname = usePathname()
 
   return (

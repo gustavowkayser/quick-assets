@@ -2,6 +2,10 @@ import React from 'react'
 
 import { SignIn } from '@clerk/nextjs' 
 
+export function generateStaticParams() {
+  return [ { slug: [""] } ]
+}
+
 function Page() {
   return (
     <div className='min-h-screen flex justify-center items-center align-middle'>
