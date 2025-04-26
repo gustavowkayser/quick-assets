@@ -19,10 +19,11 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { useSearchParams, useRouter } from "next/navigation"
+import { OptionsProps } from "@/lib/types"
 
 
 interface ComboboxProps {
-    options: { value: string; label: string }[]
+    options: OptionsProps[]
     selectLabel: string
     notFoundLabel: string
     searchPlaceholder: string
@@ -31,20 +32,12 @@ interface ComboboxProps {
 export function ComboboxDemo({ options, selectLabel, notFoundLabel, searchPlaceholder }: ComboboxProps) {
   const [open, setOpen] = React.useState(false)
   const [value, setValue] = React.useState("")
-  const [formData, setFormData] = React.useState('')
 
   const searchParams = useSearchParams()
   const router = useRouter()
 
-  const handleSubmit = async () => {
-    if (!formData) return
-    console.log("Form submitted with data:", formData)
-  }
-
   const handleChange = (currentValue: string) => {
     const params = new URLSearchParams(window.location.search)
-    setFormData(currentValue)
-    console.log("Form data changed:", currentValue)
     params.set("wallet", currentValue)
     router.push(`?${createQueryString("wallet", currentValue)}`)
   }
@@ -84,7 +77,7 @@ export function ComboboxDemo({ options, selectLabel, notFoundLabel, searchPlaceh
                   {options.map((option) => (
                     <CommandItem
                       key={option.value}
-                      value={option.value}
+                      value={option.value || ""}
                       onSelect={(currentValue) => {
                         setValue(currentValue === value ? "" : currentValue)
                         setOpen(false)
