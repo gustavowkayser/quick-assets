@@ -3,7 +3,7 @@
 import DashboardContent from '@/components/dashboard-content'
 import { ComboboxDemo } from '@/components/ui/combobox'
 import { Separator } from '@/components/ui/separator'
-import React, { use, useEffect, useState } from 'react'
+import React, { Suspense, use, useEffect, useState } from 'react'
 
 import { getUserId, getWallets } from '@/app/actions/actions'
 
@@ -29,14 +29,16 @@ function Dashboard() {
   }, [])
 
   return (
-    <div className='w-full h-full bg-background p-4'>
-      <div className='flex flex-row gap-5 align-middle items-center'>
-        <h1 className='text-xl font-normal px-5 py-5'>Dashboard</h1>
-        <ComboboxDemo options={options} selectLabel="Select a Wallet" notFoundLabel="Wallet not found" searchPlaceholder="Search a Wallet"/>
+    <Suspense>
+      <div className='w-full h-full bg-background p-4'>
+        <div className='flex flex-row gap-5 align-middle items-center'>
+          <h1 className='text-xl font-normal px-5 py-5'>Dashboard</h1>
+          <ComboboxDemo options={options} selectLabel="Select a Wallet" notFoundLabel="Wallet not found" searchPlaceholder="Search a Wallet"/>
+        </div>
+        <Separator />
+        <DashboardContent />
       </div>
-      <Separator />
-      <DashboardContent />
-    </div>
+    </Suspense>
   )
 }
 
