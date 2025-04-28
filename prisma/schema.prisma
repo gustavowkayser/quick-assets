@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -18,31 +12,32 @@ model User {
   name      String?
   email     String?  @unique
   password  String?
-  wallets   Wallet[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  wallets   Wallet[]
 }
 
 model Wallet {
-  id        String   @id @default(cuid())
-  name      String?
-  passcode  String?
-  balance   Float    @default(0)
-  userId    String
-  user      User     @relation(fields: [userId], references: [id])
-  assets    Asset[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id             String   @id @default(cuid())
+  name           String?
+  passcode       String?
+  balance        Float    @default(0)
+  userId         String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  balanceHistory Float[]
+  assets         Asset[]
+  user           User     @relation(fields: [userId], references: [id])
 }
 
 model Asset {
-  id        String   @id @default(cuid())
-  name      String?
-  ticker    String?
-  amountQuotes    Int?    @default(0)
-  appliedAmount Float?    @default(0)
-  walletId  String
-  wallet    Wallet   @relation(fields: [walletId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            String   @id @default(cuid())
+  name          String?
+  ticker        String?
+  amountQuotes  Int?     @default(0)
+  appliedAmount Float?   @default(0)
+  walletId      String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  wallet        Wallet   @relation(fields: [walletId], references: [id])
 }

@@ -1,6 +1,6 @@
 'use client'
 
-import DashboardContent from '@/components/dashboard-content'
+import DashboardContent from '@/components/dashboard/dashboard-content'
 import { ComboboxDemo } from '@/components/ui/combobox'
 import { Separator } from '@/components/ui/separator'
 import React, { Suspense, use, useEffect, useState } from 'react'
@@ -9,20 +9,24 @@ import { getUserId, getWallets } from '@/app/actions/actions'
 
 import { useSearchParams } from 'next/navigation'
 import { OptionsProps } from '@/lib/types'
+import { createUserIfNotExists } from '@/app/actions/createUserIfNotExists'
+import { auth } from '@clerk/nextjs/server'
+import { useAuth } from '@clerk/nextjs'
 
 
 function Dashboard() {
+  const { userId, isLoaded } = useAuth()
   const [options, setOptions] = useState<OptionsProps[]>([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     async function fetchWallets() {
-      const data = await getWallets({ userId: '1234' })
+      const data = await getWallets({ userId: userId || ''})
       const mapped = data.map((c) => ({
         label: c.name,
         value: c.id,
       }))
       setOptions(mapped)
-      console.log("Fetched wallets:", mapped)
     }
 
     fetchWallets()

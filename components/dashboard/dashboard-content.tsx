@@ -3,9 +3,10 @@
 import React from 'react'
 
 import { useSearchParams } from 'next/navigation'
-import { Card, CardContent } from './ui/card'
+import { Card, CardContent, CardHeader } from '../ui/card'
 import { TrendingDown, TrendingUp } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import ChartSection from '../chart-section'
 
 function DashboardContent() {
   const [investedValue, setInvestedValue] = React.useState(2100)
@@ -15,8 +16,6 @@ function DashboardContent() {
 
   const searchParams = useSearchParams()
   const walletId = searchParams.get('wallet')
-
-  console.log("Wallet ID from URL:", walletId)
 
   if (!walletId) return <div className='w-full h-96 flex justify-center align-middle bg-background p-4'><h1 className='text-2xl'>Please select a wallet</h1></div>
 
@@ -37,6 +36,16 @@ function DashboardContent() {
               <p className={cn((grossValue > investedValue) ? 'text-success' : 'text-destructive')}>{profitPercent}%</p>
               <p className='text-[1.4rem] font-light'>R$ {grossValue}</p>
             </div>
+          </CardContent>
+        </Card>
+      </div>
+      <div>
+        <Card className='my-2'>
+          <CardHeader>
+            <h1>Gross Value x Time</h1>
+          </CardHeader>
+          <CardContent>
+            <ChartSection />
           </CardContent>
         </Card>
       </div>

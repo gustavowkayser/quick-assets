@@ -29,6 +29,10 @@ import {
 import Image from "next/image"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
+import { getWallets } from "@/app/actions/actions"
+import { useEffect, useState } from "react"
+import Modal from "./wallet-modal"
+import WalletModal from "./wallet-modal"
 
 const items = [
   {
@@ -38,26 +42,31 @@ const items = [
   },
 ]
 
-const wallets = [
-  {
-    title: "Wallet 1",
-    url: "/wallets/1",
-  },
-  {
-    title: "Wallet 2",
-    url: "/wallets/2",
-  },
-  {
-    title: "Wallet 3",
-    url: "/wallets/3",
-  },
-]
-
 export function AppSidebar() {
   const pathname = usePathname()
+  const [wallets, setWallets] = useState<{ title: string | null; url: string }[]>([])
+  const [modalIsOpen, setModalIsOpen] = useState(false)
+
+  const closeModal = () => {
+    setModalIsOpen(false)
+  }
+
+  useEffect(() => {
+    const fetchWallets = async () => {
+      const wallets = await getWallets({ userId: "1234"})
+      const mapped = wallets.map((wallet) => ({
+        title: wallet.name,
+        url: `/wallets/${wallet.id}`,
+      }))
+      setWallets(mapped)
+    }
+
+    fetchWallets()
+  }, [])
 
   return (
     <Sidebar>
+        {modalIsOpen ? <WalletModal closeModal={closeModal}/> : <></>}
         <SidebarHeader>
             <Link href="/">
                 <Image src={Favicon} alt="" width={80}/>
@@ -102,11 +111,11 @@ export function AppSidebar() {
               </SidebarMenuButton>
             </SidebarMenuItem> ))}
             <SidebarMenuItem>
-              <SidebarMenuButton asChild className="hover:cursor-pointer hover:bg-emerald-300 hover:text-secondary">
-                <Link href="#" className="text-emerald-300">
-                  <Plus />
-                  <span>Create new Wallet</span>
-                </Link>
+              <SidebarMenuButton asChild className="hover:cursor-pointer hover:bg-emerald-300 hover:text-secondary" onClick={() => setModalIsOpen(true)}>
+                  <span>
+                    <Plus />
+                    <span>Create new Wallet</span>
+                  </span>
               </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>
