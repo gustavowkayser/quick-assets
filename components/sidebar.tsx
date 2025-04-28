@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation"
 
 import Favicon from "@/app/favicon.ico"
 
-import { SignedIn, SignedOut, SignOutButton } from "@clerk/nextjs"
+import { SignedIn, SignedOut, SignOutButton, useAuth } from "@clerk/nextjs"
 
 import {
   Collapsible,
@@ -44,8 +44,9 @@ const items = [
 
 export function AppSidebar() {
   const pathname = usePathname()
-  const [wallets, setWallets] = useState<{ title: string | null; url: string }[]>([])
+  const [wallets, setWallets] = useState<{ id: string; title: string | null; url: string }[]>([])
   const [modalIsOpen, setModalIsOpen] = useState(false)
+  const { userId, isLoaded } = useAuth();
 
   const closeModal = () => {
     setModalIsOpen(false)
@@ -53,16 +54,19 @@ export function AppSidebar() {
 
   useEffect(() => {
     const fetchWallets = async () => {
-      const wallets = await getWallets({ userId: "1234"})
-      const mapped = wallets.map((wallet) => ({
+      if (!isLoaded) return;
+
+      const wallets = await getWallets({ userId: userId })
+      const mapped = wallets?.map((wallet) => ({
+        id: wallet.id,
         title: wallet.name,
         url: `/wallets/${wallet.id}`,
       }))
-      setWallets(mapped)
+      setWallets(mapped || [])
     }
 
     fetchWallets()
-  }, [])
+  }, [userId, isLoaded])
 
   return (
     <Sidebar>
@@ -102,9 +106,9 @@ export function AppSidebar() {
         <CollapsibleContent>
           <SidebarGroupContent />
           <SidebarMenu>
-            {wallets.map((wallet) => (<SidebarMenuItem key={wallet.title}>
+            {wallets?.map((wallet) => (<SidebarMenuItem key={wallet.id}>
               <SidebarMenuButton asChild className={cn("hover:cursor-pointer", wallet.url === pathname ? `bg-primary hover:bg-primary` : ``)} key={wallet.title}>
-                <Link href={wallet.url} key={wallet.title}>
+                <Link href={wallet.url} key={wallet.id}>
                   <Wallet />
                   <span>{wallet.title}</span>
                 </Link>

@@ -21,16 +21,18 @@ function Dashboard() {
 
   useEffect(() => {
     async function fetchWallets() {
+      if (!isLoaded) return;
+
       const data = await getWallets({ userId: userId || ''})
-      const mapped = data.map((c) => ({
+      const mapped = data?.map((c) => ({
         label: c.name,
         value: c.id,
       }))
-      setOptions(mapped)
+      setOptions(mapped || [])
     }
 
     fetchWallets()
-  }, [])
+  }, [userId, isLoaded])
 
   return (
     <Suspense>

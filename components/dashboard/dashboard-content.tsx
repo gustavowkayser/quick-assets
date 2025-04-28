@@ -1,21 +1,36 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import { useSearchParams } from 'next/navigation'
 import { Card, CardContent, CardHeader } from '../ui/card'
 import { TrendingDown, TrendingUp } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import ChartSection from '../chart-section'
+import { getWalletById } from '@/app/actions/actions'
 
 function DashboardContent() {
-  const [investedValue, setInvestedValue] = React.useState(2100)
-  const [grossValue, setGrossValue] = React.useState(1500)
+  const [investedValue, setInvestedValue] = React.useState(0)
+  const [grossValue, setGrossValue] = React.useState(1000)
 
   const [profitPercent, setProfitPercent] = React.useState(Math.round(((Math.abs(grossValue - investedValue)) / investedValue) * 100))
 
   const searchParams = useSearchParams()
   const walletId = searchParams.get('wallet')
+
+  useEffect(() => {
+    const setupData = async () => {
+      if (!walletId) return
+
+      const wallet = await getWalletById(walletId)
+
+      if (!wallet) return
+
+      setInvestedValue(wallet.balance)
+    }
+
+    setupData()
+  }, [walletId])
 
   if (!walletId) return <div className='w-full h-96 flex justify-center align-middle bg-background p-4'><h1 className='text-2xl'>Please select a wallet</h1></div>
 

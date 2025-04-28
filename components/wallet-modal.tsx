@@ -3,15 +3,31 @@ import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { X } from "lucide-react";
-import { FormEvent } from "react";
+import { FormEvent, useTransition } from "react";
+import { useAuth } from "@clerk/nextjs";
+import { createWallet } from "@/app/actions/actions";
+import { toast } from "sonner";
+import { revalidate } from "@/app/actions/routing";
+import { usePathname, useRouter } from "next/navigation";
 
 function WalletModal({ closeModal }: { closeModal: any }) {
+    const { userId, isLoaded } = useAuth();
+    const router = useRouter()
+    const [isPending, startTransition] = useTransition();
+    const pathname = usePathname()
 
-    const onSubmit = (event: FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
+    const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
+        if (!isLoaded) return;
 
         const formData = new FormData(event.currentTarget)
-        
+        const name = formData.get('name')?.toString() || ''
+        const passcode = formData.get('passcode')?.toString() || ''
+
+        const wallet = await createWallet(name, passcode, userId)
+
+        toast('A new wallet was created!')
+
+        await revalidate(`/wallets/${wallet?.id}`)
     }
 
     return (
