@@ -1,36 +1,37 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Quick Assets
 
-## Getting Started
+Quick Assets é um gerenciador de carteiras de investimento com múltiplos tipos de ativos, análise inteligente, integração com dados em tempo real e alertas personalizados. Desenvolvido com Next.js 15, Prisma, PostgreSQL, Supabase, Clerk e inteligência artificial.
 
-First, run the development server:
+## Funcionalidades
+
+- Cadastro de múltiplas carteiras por usuário
+- Suporte a diversos ativos: Ações BR/USA, FIIs, ETFs, Renda Fixa
+- Dados de mercado atualizados em tempo real (via BRAPI API)
+- IA integrada para análises personalizadas de ativos
+- Alertas por e-mail quando ativos atingirem determinado preço
+- Suporte a usuários autenticados (via Clerk) e anônimos (localStorage/Redis)
+- UI moderna e responsiva com TailwindCSS
+
+## Tecnologias
+
+- **Next.js 15 (App Router)**
+- **Prisma ORM**
+- **PostgreSQL (via Supabase)**
+- **Clerk (autenticação)**
+- **TailwindCSS (UI)**
+- **Docker + GitHub Actions (deploy)**
+- **Redis (dados temporários para usuários anônimos)**
+- **BRAPI (API de dados financeiros)**
+- **OpenAI / IA personalizada** para análise de ativos
+- **n8n** para envio automático de alertas
+
+## Instalação
 
 ```bash
+git clone https://github.com/gustavowkayser/quick-assets.git
+cd quick-assets
+cp .env.example .env
+npm install
+npx prisma generate
+npx prisma migrate dev
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
