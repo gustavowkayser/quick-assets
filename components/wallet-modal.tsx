@@ -8,7 +8,7 @@ import { useAuth } from "@clerk/nextjs";
 import { createWallet } from "@/app/actions/actions";
 import { toast } from "sonner";
 import { revalidate } from "@/app/actions/routing";
-import { usePathname, useRouter } from "next/navigation";
+import { redirect, usePathname, useRouter } from "next/navigation";
 
 function WalletModal({ closeModal }: { closeModal: any }) {
     const { userId, isLoaded } = useAuth();
@@ -28,6 +28,7 @@ function WalletModal({ closeModal }: { closeModal: any }) {
         toast('A new wallet was created!')
 
         await revalidate(`/wallets/${wallet?.id}`)
+        redirect('/dashboard')
     }
 
     return (

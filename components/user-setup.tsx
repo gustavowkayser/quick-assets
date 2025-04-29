@@ -19,7 +19,6 @@ function UserSetup({children}: {children: React.ReactNode}) {
             }
 
             await createUserIfNotExists(userId, newUser)
-            console.log(userId)
           } catch (error) {
             console.error('Erro criando usuário:', error)
           }
